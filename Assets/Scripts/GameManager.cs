@@ -2,11 +2,10 @@ using UnityEngine;
 
 public enum HeroClass // enum ile yeni veri tipi tanımladık
 {
-    Knight,
-    Wizard,
-    Rogue,
-    Bard
+        Knight,Wizard,Rogue,Bard
 }
+
+public enum StatType { Strength, Dexterity, Intelligence, Charisma }
 
 public struct HeroStats  //struct ile tek bi paket yaptık
 {
