@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: dffdf782672be38479dbc241fcac0130
+guid: 79f858d4186aa5145b6e6bc3373d037b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4706021518850718704
-    second: Sprite-QuestPapaer_0
+      213: 7688344212149110507
+    second: Sprite-BigQuestPapaer_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sprite-QuestPapaer_0
+      name: Sprite-BigQuestPapaer_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0fbf07843a52f4140800000000000000
-      internalID: 4706021518850718704
+      spriteID: be6041c835c72ba60800000000000000
+      internalID: 7688344212149110507
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Sprite-QuestPapaer_0: 4706021518850718704
+      Sprite-BigQuestPapaer_0: 7688344212149110507
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,12 +1,20 @@
 using UnityEngine;
 using UnityEngine.EventSystems; //sürüklemek için gereli
+using System.Collections;
+using Unity.VisualScripting; //düşme animasyonu için gerekli
 
-public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler
+public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler,IPointerClickHandler
 {
     [HideInInspector] public Transform parentAfterDrag;
     private CanvasGroup canvasGroup;
-
     public QuestData myQuestData;
+
+    [Header("Fall Settings")]
+    public float deskSurfaceY=60f; 
+    public float fallSpeed=1000f;
+
+    private Coroutine fallCoroutine;   
+
 
     void Awake()
     {
@@ -17,8 +25,15 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
         }
     }
 
+
     public void OnBeginDrag(PointerEventData eventData)
     {
+        //masaya düşerken tekrar havada yakala
+        if (fallCoroutine != null)
+        {
+            StopCoroutine(fallCoroutine);
+        }
+
         //sürüklemeye başlamadanki yeri kaydet
         parentAfterDrag=transform.parent; 
         //sürüklerkken en üst canvasa taşı
@@ -39,5 +54,36 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
         transform.SetParent(parentAfterDrag);
         canvasGroup.blocksRaycasts=true;
 
+        RectTransform rect=GetComponent<RectTransform>();
+        //havadaysa düşür
+        if (rect.localPosition.y > deskSurfaceY)
+        {
+            fallCoroutine=StartCoroutine(FallToDesk(rect));
+        }
+    }
+
+    //düşme için
+    private IEnumerator FallToDesk(RectTransform rect)
+    {   //masaya değene kadar çalış
+        while(rect.localPosition.y> deskSurfaceY)
+        {
+            rect.localPosition -= new Vector3(0,fallSpeed*Time.deltaTime,0);
+            if (rect.localPosition.y <= deskSurfaceY)
+            {
+                rect.localPosition=new Vector3(rect.localPosition.x , deskSurfaceY , rect.localPosition.z);
+                break;
+            }
+            yield return null; // sonraki framei bekle
+        }
+    }
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.clickCount == 2)
+        {
+            Debug.Log("quest: "+ myQuestData.questName+" \n for the "+myQuestData.preferredClass +" and "+ myQuestData.requiredStat+":"+myQuestData.statThreshold+" gold: "+myQuestData.rewardGold);
+            UIManager.Instance.ShowQuestDetails(myQuestData);
+        }
     }
 }

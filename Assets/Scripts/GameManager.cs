@@ -21,6 +21,8 @@ public struct HeroStats  //struct ile tek bi paket yaptık
 
 public class GameManager : MonoBehaviour
 {
+    
+
     [Header("Managment referance")]
     public UIManager uiManager;
 
@@ -79,8 +81,7 @@ public class GameManager : MonoBehaviour
         
 
         Debug.Log("--Masaya biri geldi--");
-        Debug.Log($"class {newHero.heroClass}");
-        Debug.Log($"Str: {newHero.strength} | Dex: {newHero.dexterity} | Int: {newHero.intelligence} | Cha: {newHero.charisma} \n Hp: {newHero.maxHealth} | Gold: {newHero.goldAmount}");
+        Debug.Log($"<class {newHero.heroClass}> Str: {newHero.strength} | Dex: {newHero.dexterity} | Int: {newHero.intelligence} | Cha: {newHero.charisma} \n Hp: {newHero.maxHealth} | Gold: {newHero.goldAmount}");
 
 
         uiManager.UpdateHeroUI(newHero);

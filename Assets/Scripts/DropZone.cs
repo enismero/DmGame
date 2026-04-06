@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 
 public class DropZone : MonoBehaviour, IDropHandler
 {
+    public DraggablePaper paper;
     public void OnDrop(PointerEventData eventData)
     {
         //farede dragable obje varsa al
@@ -14,7 +15,7 @@ public class DropZone : MonoBehaviour, IDropHandler
             {
                 //paperın parentenı dropzone ayarla
                 paper.parentAfterDrag=transform;
-                Debug.Log("paper is drop");
+                Debug.Log(paper.myQuestData.questName+" is drop");
             }
         }
     }
