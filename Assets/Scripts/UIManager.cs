@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     [Header("Hero UI referance")]
+        public GameObject heroDetailPanel;
         public TextMeshProUGUI classNameText;
         public TextMeshProUGUI statsText;
         public TextMeshProUGUI healthText;
@@ -31,10 +32,19 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHeroUI(HeroStats hero)
     {
+        heroDetailPanel.SetActive(false);
         classNameText.text="Class: "+hero.heroClass.ToString();
-        statsText.text=$"Str: {hero.strength} | Dex: {hero.dexterity} | Int: {hero.intelligence} | Cha: {hero.charisma}";
+        statsText.text=$"Str: {hero.strength}\nDex: {hero.dexterity}\nInt: {hero.intelligence}\nCha: {hero.charisma}";
         healthText.text=$"Hp: {hero.maxHealth}";
         goldText.text=$"Gold: {hero.goldAmount}";
+    }
+    public void CloseHeroDetails()
+    {
+        heroDetailPanel.SetActive(false);
+    }
+    public void OpenHeroDetails()
+    {
+        heroDetailPanel.SetActive(true);
     }
 
 
