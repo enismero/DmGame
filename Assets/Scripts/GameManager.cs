@@ -32,16 +32,46 @@ public class GameManager : MonoBehaviour
         int heroCount = System.Enum.GetValues(typeof(HeroClass)).Length;
 
         HeroStats newHero= new HeroStats();
+
         //select random hero class
         newHero.heroClass= (HeroClass)Random.Range(0,heroCount);
 
-        newHero.strength= Random.Range(1,11);
-        newHero.dexterity= Random.Range(1,11);
-        newHero.intelligence= Random.Range(1,11);
-        newHero.charisma= Random.Range(1,11);
+        //average stats
+        newHero.strength= Random.Range(1,6);
+        newHero.dexterity= Random.Range(1,6);
+        newHero.intelligence= Random.Range(1,6);
+        newHero.charisma= Random.Range(1,6);
+
+        //specific stats
+        switch (newHero.heroClass)
+        {
+            case HeroClass.Knight: //+STR-INT
+                newHero.strength=Random.Range(7,11);
+                newHero.intelligence=Random.Range(1,4);
+                newHero.goldAmount = Random.Range(50, 150);
+                break;
+
+            case HeroClass.Wizard: //+INT-STR
+                newHero.strength=Random.Range(1,4);
+                newHero.intelligence=Random.Range(8,11);
+                newHero.goldAmount = Random.Range(150, 300);
+                break;
+            
+            case HeroClass.Rogue: //+DEX~CHA
+                newHero.dexterity=Random.Range(8, 11);
+                newHero.charisma = Random.Range(4, 8);
+                newHero.goldAmount = Random.Range(300, 600);
+                break;
+
+            case HeroClass.Bard: //+CHA~DEX
+                newHero.dexterity=Random.Range(4, 8);
+                newHero.charisma = Random.Range(8, 11);
+                newHero.goldAmount = Random.Range(200, 450);
+                break;
+        }
 
         newHero.maxHealth= 10+ (newHero.strength*2);
-        newHero.goldAmount=Random.Range(50,501);
+        
 
         Debug.Log("--Masaya biri geldi--");
         Debug.Log($"class {newHero.heroClass}");
