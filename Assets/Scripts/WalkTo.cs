@@ -10,6 +10,8 @@ public class WalkTo : MonoBehaviour
     [Header("Bobing Settings")]
         public float bobHeight=5f;
         public float bobSpeed=5f;
+    [Header("Diyalog Ayarları")]
+        public GameObject dialoguePanel;
 
     void Start()
     {
@@ -21,6 +23,7 @@ public class WalkTo : MonoBehaviour
         bool hasDesk = false;
         float elapsedTime=0f;
         Vector3 basePos = transform.position;
+
         while (true)
         {
             elapsedTime += Time.deltaTime;
@@ -32,6 +35,11 @@ public class WalkTo : MonoBehaviour
                     hasDesk=true;
                     basePos=targetPos.position;
                     Debug.Log("postacı yürüdü");
+
+                    if(dialoguePanel!=null) 
+                    {
+                        dialoguePanel.SetActive(true);
+                    }
                 }
             }
 
