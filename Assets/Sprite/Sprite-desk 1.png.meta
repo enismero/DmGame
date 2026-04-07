@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 57fd0bc8e68abee45ba9ba528caef6fd
+guid: 81f9525a960aed74189d133b96d3e5ac
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5129281513844870194
-    second: Sprite-HeroPapaer_0
+      213: 4661490035960412446
+    second: Sprite-desk 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sprite-HeroPapaer_0
+      name: Sprite-desk 1_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 74
-        width: 120
-        height: 76
+        y: 0
+        width: 1366
+        height: 315
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ec37c46a3a121d8b0800000000000000
-      internalID: -5129281513844870194
+      spriteID: e1971757d70f0b040800000000000000
+      internalID: 4661490035960412446
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Sprite-HeroPapaer_0: -5129281513844870194
+      Sprite-desk 1_0: 4661490035960412446
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

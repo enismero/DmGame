@@ -25,7 +25,10 @@ public class TaskManager : MonoBehaviour
   public List<QuestData> currentBoardQuest= new List<QuestData>();
 
 
-    void Start() { SpawnQuestOnDesk();SpawnQuestOnDesk();SpawnQuestOnDesk();SpawnQuestOnDesk(); }
+    void Start() 
+    { 
+        SpawnQuestOnDesk();SpawnQuestOnDesk();SpawnQuestOnDesk();SpawnQuestOnDesk(); 
+    }
     public void SpawnQuestOnDesk()
     {
         QuestData newData= GenerateRandomQuestData();

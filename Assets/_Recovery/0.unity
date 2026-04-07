@@ -395,6 +395,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WalkTo
   targetPos: {fileID: 416277297}
   walkSpeed: 500
+  bobHight: 15
+  bobSpeed: 10
 --- !u!1 &213823544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,6 +1758,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WalkTo
   targetPos: {fileID: 416277297}
   walkSpeed: 500
+  bobHight: 5
+  bobSpeed: 50
 --- !u!1 &1672104680
 GameObject:
   m_ObjectHideFlags: 0

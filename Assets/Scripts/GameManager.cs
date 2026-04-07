@@ -60,19 +60,19 @@ public class GameManager : MonoBehaviour
 
             case HeroClass.Wizard: //+INT-STR
                 newHero.strength=Random.Range(1,4);
-                newHero.intelligence=Random.Range(8,11);
+                newHero.intelligence=Random.Range(7,11);
                 newHero.goldAmount = Random.Range(150, 300);
                 break;
             
             case HeroClass.Rogue: //+DEX~CHA
-                newHero.dexterity=Random.Range(8, 11);
+                newHero.dexterity=Random.Range(7, 11);
                 newHero.charisma = Random.Range(4, 8);
                 newHero.goldAmount = Random.Range(300, 600);
                 break;
 
             case HeroClass.Bard: //+CHA~DEX
                 newHero.dexterity=Random.Range(4, 8);
-                newHero.charisma = Random.Range(8, 11);
+                newHero.charisma = Random.Range(7, 11);
                 newHero.goldAmount = Random.Range(200, 450);
                 break;
         }
