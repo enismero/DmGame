@@ -13,7 +13,9 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
     public float deskSurfaceY=60f; 
     public float fallSpeed=1000f;
 
-    private Coroutine fallCoroutine;   
+    private Coroutine fallCoroutine; 
+
+    [HideInInspector] public bool isReturned = false; // iade edildi mi
 
 
     void Awake()
@@ -50,6 +52,10 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
+
+        if(isReturned) return; //eğer postacıya verildiyse çık
+        
+
         //sürükleme bittiğinde yeni yere koy bırakılmadıysa eski yerine
         transform.SetParent(parentAfterDrag);
         canvasGroup.blocksRaycasts=true;

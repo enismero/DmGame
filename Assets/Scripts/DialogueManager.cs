@@ -5,18 +5,25 @@ using UnityEngine.EventSystems;
 
 public class DialogueManager : MonoBehaviour
 {
+    [Header("referanges")]
+        public TaskManager taskManager;
+        public int SpawnQuestAmount=8;
+
     [Header("Dialogue Settings")]
         public TextMeshProUGUI dialogueText;
         public float typingSpeed=0.05f;
         public int maxCharacters= 50;
+
     [Header("mesages")]
     [TextArea(3,10)]
     public string[] messages;
 
+
     private int currentLineIndex=0;
     private bool isTyping=false;
     private Coroutine typingCorountine;
-
+    public OpenHeroPaper openHeroPaper;
+    public WalkTo walkTo;
     
 
     void OnEnable()
@@ -24,20 +31,54 @@ public class DialogueManager : MonoBehaviour
         currentLineIndex = 0;
         StartNextLine();
     }
+
+
     public void NextSentences()
     {
         if (isTyping)
-        {
+        {   //yazarken tıklarsa durdur ve fulle
             StopCoroutine(typingCorountine);
-            string fullSentence=messages[currentLineIndex];
+            dialogueText.text=messages[currentLineIndex];
             isTyping=false;
         }
         else
         {
             currentLineIndex++;
+
+            if (openHeroPaper.IsPostman)
+                {
+                    if(currentLineIndex==1 && taskManager != null)
+                    {
+                        for(int i = 0; i <= SpawnQuestAmount-1; i++)
+                        {
+                            taskManager.SpawnQuestOnDesk();
+                        
+                        }
+                        Debug.Log("Quest papers was spawned("+(SpawnQuestAmount-1) + ")");
+                    }
+                    
+                }
+
+            if (currentLineIndex >= messages.Length)
+                    {
+                        if (openHeroPaper.IsPostman && walkTo != null)
+                        {
+                            walkTo.GoBack();
+                            gameObject.SetActive(false);
+                            return;
+                        }
+                    }
+                
+
+               
+            
+
+
             StartNextLine();
-        }   
+        }
     }
+
+
     public void StartNextLine()
     {
         if(currentLineIndex<messages.Length) typingCorountine=StartCoroutine(TypeText(messages[currentLineIndex]));
@@ -47,6 +88,8 @@ public class DialogueManager : MonoBehaviour
             Debug.Log("diyalog bitti");
         }
     }
+
+
 
     private IEnumerator TypeText(string textToType)
     {
