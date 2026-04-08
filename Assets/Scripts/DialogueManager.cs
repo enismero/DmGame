@@ -25,6 +25,7 @@ public class DialogueManager : MonoBehaviour
     public OpenHeroPaper openHeroPaper;
     public WalkTo walkTo;
     
+    
 
     void OnEnable()
     {
@@ -44,7 +45,7 @@ public class DialogueManager : MonoBehaviour
         else
         {
             currentLineIndex++;
-
+        //postman için ilk gün toutorial kısmı quest papaer spawnlama gir ve çık
             if (openHeroPaper.IsPostman)
                 {
                     if(currentLineIndex==1 && taskManager != null)
@@ -61,19 +62,15 @@ public class DialogueManager : MonoBehaviour
 
             if (currentLineIndex >= messages.Length)
                     {
-                        if (openHeroPaper.IsPostman && walkTo != null)
+                        if (walkTo != null)
                         {
                             walkTo.GoBack();
                             gameObject.SetActive(false);
+                            
                             return;
                         }
                     }
-                
-
-               
-            
-
-
+        
             StartNextLine();
         }
     }
@@ -101,8 +98,6 @@ public class DialogueManager : MonoBehaviour
         {
             visibleText+=letter;
 
-           // if (visibleText.Length > maxCharacters) visibleText=visibleText.Substring(1);
-            
             dialogueText.text=visibleText;
             yield return new WaitForSeconds(typingSpeed);
         }

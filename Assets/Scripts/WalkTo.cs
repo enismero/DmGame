@@ -13,6 +13,7 @@ public class WalkTo : MonoBehaviour
         public float bobSpeed=5f;
     [Header("Diyalog Ayarları")]
         public GameObject dialoguePanel;
+        public GameObject heroObject;
 
     private Vector3 startPos;
     private Vector3 currentGoal;
@@ -60,6 +61,7 @@ public class WalkTo : MonoBehaviour
                     {
                         Debug.Log("postacı döndü");
                         gameObject.SetActive(false);
+                        if(heroObject!=null) heroObject.SetActive(true);  
                     }
                 }
             }

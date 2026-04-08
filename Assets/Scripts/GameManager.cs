@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public enum HeroClass // enum ile yeni veri tipi tanımladık
 {
         Knight,Wizard,Rogue,Bard
@@ -9,6 +10,7 @@ public enum StatType { Strength, Dexterity, Intelligence, Charisma }
 
 public struct HeroStats  //struct ile tek bi paket yaptık
 {
+    public string heroName;
     public HeroClass heroClass;
     public int strength;
     public int dexterity;
@@ -25,9 +27,11 @@ public class GameManager : MonoBehaviour
 
     [Header("Managment referance")]
     public UIManager uiManager;
+    public HeroGenerator heroGenerator;
 
 
     public HeroStats newHero;
+
 
     void Start()
     {
@@ -36,10 +40,20 @@ public class GameManager : MonoBehaviour
 
     public void SpawnRandomHero()
     {
-        int heroCount = System.Enum.GetValues(typeof(HeroClass)).Length;
-
         newHero= new HeroStats();
 
+    //generate visual and name
+        if (heroGenerator != null)
+        {
+            newHero.heroName=heroGenerator.GenerateVisualsAndName();
+        }
+        else
+        {
+            newHero.heroName="unknown hero";
+        }
+
+    //generate class and stats
+        int heroCount = System.Enum.GetValues(typeof(HeroClass)).Length;
         //select random hero class
         newHero.heroClass= (HeroClass)Random.Range(0,heroCount);
 
