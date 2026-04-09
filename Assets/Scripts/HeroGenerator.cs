@@ -6,6 +6,9 @@ using Random = UnityEngine.Random;
 
 public class HeroGenerator : MonoBehaviour
 {
+
+    [HideInInspector] public string currentHeroName;
+
     [Header("Layers")]
     public Image bodyLayer;
     public Image headLayer;
@@ -35,9 +38,33 @@ public class HeroGenerator : MonoBehaviour
     public Color[] hairColors;
     public Color[] eyeColors;
 
-    [Header("names")]
-    public String[] firstName={"random"};
-    public string[] lastName={"generate"};
+    [Header("Names :")]
+    public String[] firstNames =
+    {
+        "Aurelius", "Cassia", "Valerius", "Lucan", "Titus", "Silas", "Julia", "Felix", "Rufina", "Gaius", 
+        "Lucia", "Decimus", "Quintus", "Octavia", "Tiberius", "Magnus", "Justina", "Linus", "Ignis", "Caelus", 
+        "Alaric", "Balian", "Cedric", "Dante", "Ector", "Gareth", "Hector", "Leofric", "Martel", "Percival", 
+        "Roland", "Tristan", "Uther", "Valeria", "Aldous", "Beric", "Cassian", "Dorian", "Eliana", "Finnian", 
+        "Gideon", "Hadrian", "Ilias", "Jorah", "Kaelen", "Loriana", "Marius", "Nicias", "Orion", "Phineas",
+        "Achilles", "Adonis", "Aeneas", "Ajax", "Apollo", "Ares", "Asclepius", "Atlas", "Cadmus", "Castor", 
+        "Chiron", "Daedalus", "Dionysus", "Eros", "Hades", "Hector", "Helios", "Hephaestus", "Heracles", "Hermes", 
+        "Icarus", "Jason", "Minos", "Morpheus", "Nestor", "Odysseus", "Orion", "Orpheus", "Pan", "Paris", 
+        "Patroclus", "Peleus", "Perseus", "Poseidon", "Prometheus", "Sisyphus", "Tantalus", "Theseus", "Triton", "Zeus", 
+        "Athena", "Artemis", "Aphrodite", "Cassandra", "Daphne", "Helen", "Medea", "Penelope", "Persephone", "Psyche"
+    };
+    public string[] lastNames =
+    {
+        "Ironclad", "Corvinus", "Blackwood", "Aquila", "Stormrider", "Draconis", "Lightbringer", "Lupus", "Nightshade", "Taurus", 
+        "Bellator", "Venator", "Stronghold", "Argentum", "Goldleaf", "Silva", "Stonebridge", "Montis", "Riverrun", "Noctis", 
+        "Dawnbringer", "Lunaris", "Sunstrike", "Terra", "Seafarer", "Glacies", "Shadowwalker", "Umbra", "Truthseeker", "Lux", 
+        "Swiftfoot", "Fortis", "Ironheart", "Clarus", "Heavyhand", "Velox", "Wisebeard", "Sapiens", "Loyalblood", "Audax", 
+        "Invictus", "Aeternus", "Lionheart", "Maximus", "Bearslayer", "Severus", "Falconeye", "Pius", "Wolfhound", "Augustus",
+        "Aegis", "Olympian", "Stormcaller", "Earthshaker", "Sunblessed", "Starborn", "Seaborn", "Thunderstrike", "Windrider", "Shadowcaster", 
+        "Nightfall", "Dawnstrider", "Fireheart", "Stonecleaver", "Silverbow", "Goldenfleece", "Serpentbane", "Titanblood", "Mythborn", "Fatebinder", 
+        "Doomweaver", "Soulcatcher", "Dreamwalker", "Bloodmoon", "Darktide", "Highborn", "Deathless", "Abysswalker", "Lightbringer", "Starfall", 
+        "Sunfire", "Moondrop", "Everlasting", "Immortal", "Voidcaller", "Oracle", "Prophet", "Truthspeaker", "Oathkeeper", "Ironfist", 
+        "Swiftfoot", "Shieldbearer", "Spearhead", "Warhound", "Bloodaxe", "Gorgonslayer", "Hydrabane", "Myrmidon", "Spartan", "Argonaut"
+    };
 
 
     public string GenerateVisualsAndName()
@@ -69,8 +96,8 @@ public class HeroGenerator : MonoBehaviour
         if(pupilLayer.sprite!=null)pupilLayer.color = randomEyeColor;
 
 
-        string generateName=firstName[Random.Range(0,firstName.Length)]+" "+lastName[Random.Range(0,lastName.Length)];
-        return generateName;
+        currentHeroName=firstNames[Random.Range(0,firstNames.Length)]+" "+lastNames[Random.Range(0,lastNames.Length)];
+        return currentHeroName;
     }
 
     private void SetLayer(Image layer, Sprite[] spriteArray)

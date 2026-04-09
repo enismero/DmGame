@@ -92,4 +92,15 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
             UIManager.Instance.ShowQuestDetails(myQuestData);
         }
     }
+
+    private void OnDestroy()
+    {
+        if(UIManager.Instance!=null) 
+        {
+            if(UIManager.Instance.currentQuestData==myQuestData)//curentla aynıysa questdetailsı da kapat 
+            {
+                UIManager.Instance.CloseQuestDetails();
+            }
+        }
+    }
 }

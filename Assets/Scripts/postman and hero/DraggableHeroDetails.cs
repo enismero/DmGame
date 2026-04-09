@@ -91,4 +91,9 @@ public class DraggableHeroDetails : MonoBehaviour,IBeginDragHandler,IDragHandler
             UIManager.Instance.OpenHeroDetails();
         }
     }
+
+    private void OnDestroy()
+    {
+        if(UIManager.Instance!=null) UIManager.Instance.CloseHeroDetails();
+    }
 }
