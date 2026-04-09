@@ -8,6 +8,7 @@ public class DialogueManager : MonoBehaviour
     [Header("referanges")]
         public TaskManager taskManager;
         public int SpawnQuestAmount=8;
+        public GameManager gameManager;
 
     [Header("Dialogue Settings")]
         public TextMeshProUGUI dialogueText;
@@ -41,23 +42,34 @@ public class DialogueManager : MonoBehaviour
             StopCoroutine(typingCorountine);
             dialogueText.text=messages[currentLineIndex];
             isTyping=false;
+            return;
         }
-        else
-        {
+        
+        
             currentLineIndex++;
         //postman için ilk gün toutorial kısmı quest papaer spawnlama gir ve çık
-            if (openHeroPaper.IsPostman)
+            if (openHeroPaper!=null)
                 {
-                    if(currentLineIndex==1 && taskManager != null)
+                    if(openHeroPaper.IsPostman && taskManager != null)
                     {
+                        if (currentLineIndex == 1)
+                        {
                         for(int i = 0; i <= SpawnQuestAmount-1; i++)
                         {
                             taskManager.SpawnQuestOnDesk();
                         
                         }
                         Debug.Log("Quest papers was spawned("+(SpawnQuestAmount-1) + ")");
+                        }
                     }
-                    
+                    //kimlik bırakma
+                    else if (openHeroPaper.IsHero && gameManager != null)
+                    {
+                        if (currentLineIndex == 1)
+                        {
+                        gameManager.SpawnHeroCardOnDesk();
+                        }
+                    }
                 }
 
             if (currentLineIndex >= messages.Length)
@@ -72,7 +84,7 @@ public class DialogueManager : MonoBehaviour
                     }
         
             StartNextLine();
-        }
+        
     }
 
 

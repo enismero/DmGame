@@ -20,9 +20,6 @@ public class OpenHeroPaper : MonoBehaviour,IPointerClickHandler
                 Debug.Log("tek tıklandı sonraki metine geçildi");
             }
         }
-        else if (eventData.clickCount == 2 && IsHero)
-        {
-            UIManager.Instance.OpenHeroDetails();
-        }
+        
     }
 }

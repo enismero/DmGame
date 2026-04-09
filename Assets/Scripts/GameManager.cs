@@ -29,6 +29,11 @@ public class GameManager : MonoBehaviour
     public UIManager uiManager;
     public HeroGenerator heroGenerator;
 
+    [Header("Hero Card Settings")]
+    public GameObject heroCardPrefab; 
+    public Transform deskArea;        
+    private GameObject currentHeroCard;
+
 
     public HeroStats newHero;
 
@@ -99,5 +104,31 @@ public class GameManager : MonoBehaviour
 
 
         uiManager.UpdateHeroUI(newHero);
+    }
+
+    public void SpawnHeroCardOnDesk()
+    {
+        // Masada zaten bir kart varsa üst üste binmesin diye eskisini sil
+        if (currentHeroCard != null) Destroy(currentHeroCard);
+
+        // Yeni kartı yarat
+        currentHeroCard = Instantiate(heroCardPrefab, deskArea);
+        
+        // Boyutunun küçülmesini engelle (Görünmez olmaması için)
+        currentHeroCard.transform.localScale = Vector3.one; 
+        
+        // Havadan düşmesi için yüksekten başlat
+        currentHeroCard.transform.localPosition = new Vector3(0, 25, 0); 
+        
+        Debug.Log("Kahraman kimliği masaya fırlatıldı!");
+    }
+
+    // 3. KİMLİK KARTINI SİLME (HeroDropZone, adam gidince burayı çağırır)
+    public void DestroyHeroCard()
+    {
+        if (currentHeroCard != null)
+        {
+            Destroy(currentHeroCard);
+        }
     }
 }

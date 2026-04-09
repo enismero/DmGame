@@ -60,7 +60,7 @@ public class HeroGenerator : MonoBehaviour
 
 
         if(headLayer.sprite!=null)headLayer.color = randomSkinColor;
-        if(bodyLayer.sprite!=null)bodyLayer.color = randomSkinColor;
+       // if(bodyLayer.sprite!=null)bodyLayer.color = randomSkinColor;
 
         if(hairLayer.sprite!=null)hairLayer.color = randomHairColor;
         if(beardLayer.sprite!=null)beardLayer.color = randomHairColor;

@@ -50,16 +50,16 @@ public class WalkTo : MonoBehaviour
                 {
                     isAtTarget=true;
                     basePos=currentGoal;
-                    Debug.Log("postacı yürüdü");
+                    Debug.Log("yürüdü");
 
                     if(currentGoal==targetPos.position)
                     {
-                        Debug.Log("Postacı masaya ulaştı.");
+                        Debug.Log("masaya ulaştı.");
                         if(dialoguePanel!=null) dialoguePanel.SetActive(true);
                     }
                     else if(currentGoal==startPos)
                     {
-                        Debug.Log("postacı döndü");
+                        Debug.Log("döndü");
                         gameObject.SetActive(false);
                         if(heroObject!=null) heroObject.SetActive(true);  
                     }
