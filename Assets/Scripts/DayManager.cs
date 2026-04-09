@@ -49,7 +49,7 @@ public class DayManager : MonoBehaviour
     void EndDay()
     {
         currentState=DayState.Close;
-        Debug.Log("End of the day, you can close the shop ");
+        
     }
 
     public void CloseShop()

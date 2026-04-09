@@ -74,7 +74,7 @@ public class DialogueManager : MonoBehaviour
 
             if (currentLineIndex >= messages.Length)
                     {
-                        if (walkTo != null)
+                        if (walkTo != null&&openHeroPaper.IsPostman)
                         {
                             walkTo.GoBack();
                             gameObject.SetActive(false);
