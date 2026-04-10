@@ -23,6 +23,7 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
     public bool isCompleted = false; // Görev yapıldı mı?
     public int earnedGold = 0; // Bu kağıttan kazanılan net para
     public GameObject successStampObj;
+    public GameObject failStampObj;
 
     void Awake()
     {
@@ -107,10 +108,17 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
         }
     }
 
-    public void MarkAsCompleted(bool isSucces,int profit)
+    public void MarkAsCompleted(int profit)
     {
         isCompleted=true;
-        earnedGold=isSucces?profit:0;
-        if(isSucces&&successStampObj!=null) successStampObj.SetActive(true);
+        earnedGold=profit;
+        if(successStampObj!=null) successStampObj.SetActive(true);
+        if(failStampObj!=null) failStampObj.SetActive(false);
+    }
+    public void MarkAsFailed()
+    {
+        isCompleted=false;
+        earnedGold=0;
+        if(failStampObj!=null) failStampObj.SetActive(true);
     }
 }

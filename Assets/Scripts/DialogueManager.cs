@@ -30,6 +30,7 @@ public class DialogueManager : MonoBehaviour
 
     private bool isDynamicMode=false;
     private string currentDynamicMessage="";
+    private bool hasIntroduced=false;
 
     void Awake()
     {
@@ -38,7 +39,7 @@ public class DialogueManager : MonoBehaviour
 
     void OnEnable()
     {
-        if (isDynamicMode) return;
+        if (isDynamicMode||hasIntroduced) return;
 
         currentLineIndex = 0;
         StartNextLine();
@@ -107,6 +108,7 @@ public class DialogueManager : MonoBehaviour
         if(currentLineIndex<messages.Length) typingCorountine=StartCoroutine(TypeText(messages[currentLineIndex]));
         else
         {
+            hasIntroduced=true;
             gameObject.SetActive(false);
             Debug.Log("diyalog bitti");
         }

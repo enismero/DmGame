@@ -60,8 +60,9 @@ public class NegotiationManager : MonoBehaviour
 
         rollDiceButton.gameObject.SetActive(false);
         agreeButton.gameObject.SetActive(true);
-
         negotiationPanel.SetActive(true);
+
+        heroDialogueText.transform.parent.gameObject.SetActive(true);
         UpdateDialogue();
         
     }
@@ -150,10 +151,10 @@ public class NegotiationManager : MonoBehaviour
             //Başarılı mührünü bas!
             if (currentPaper != null) 
             {
-                currentPaper.MarkAsCompleted(true, myProfit);
+                currentPaper.MarkAsCompleted(myProfit);
                 ReturnPaperToDesk(); // Mühürlü kağıt masaya düşsün
             }
-            rollDiceButton.gameObject.SetActive(false);
+            
         }
         else
         {
@@ -163,7 +164,7 @@ public class NegotiationManager : MonoBehaviour
             // YENİ EKLEME: Görev başarısız oldu. 
             if (currentPaper != null)
             {
-                currentPaper.MarkAsCompleted(false, 0);
+                currentPaper.MarkAsFailed();
                 ReturnPaperToDesk(); 
             }
         }
