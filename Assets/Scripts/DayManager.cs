@@ -49,6 +49,14 @@ public class DayManager : MonoBehaviour
     void EndDay()
     {
         currentState=DayState.Close;
+
+        DraggablePaper[] allPapers = Object.FindObjectsByType<DraggablePaper>(FindObjectsSortMode.None);
+    
+        foreach (var paper in allPapers)
+        {
+            paper.isNew = false; // Artık hiçbiri "Yeni" değil, iade edilemezler!
+        }
+        
         
     }
 

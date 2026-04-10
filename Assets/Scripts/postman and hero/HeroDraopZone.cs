@@ -9,24 +9,32 @@ public class HeroDraopZone : MonoBehaviour,IDropHandler
     {
         gameManager = FindFirstObjectByType<GameManager>();
         
-        walkTo = GetComponent<WalkTo>();
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         DraggablePaper paper = eventData.pointerDrag.GetComponent<DraggablePaper>();
         //atılan paper mı 
+        if (paper != null && paper.isCompleted)
+        {
+            Debug.Log("sadece postacıya verilebilir görev oki");
+            return;
+        } 
         if (paper != null && gameManager != null)
         {
             QuestData quest = paper.myQuestData;
             HeroStats hero = gameManager.newHero;
             //verileri kaydet
-
+           
             
-            Debug.Log($"{hero.heroName}, '{quest.questName}' görevini aldı ");
+            Debug.Log($"{hero.heroName}, '{quest.questName}' için anlaşma vakti ");
 
-            paper.isReturned = true; 
-            Destroy(paper.gameObject);
+            paper.isReturned = false;
+            NegotiationManager.Instance.StartNegotiation(hero, quest, paper);
+        
+            
+            
+            
 
         }
     }

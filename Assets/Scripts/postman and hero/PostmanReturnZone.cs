@@ -6,17 +6,33 @@ public class PostmanReturnZone : MonoBehaviour,IDropHandler
     public OpenHeroPaper openHeroPaper;
     public void OnDrop(PointerEventData eventData)
     {
+        if (eventData.pointerDrag == null) return;
+
         DraggablePaper paper = eventData.pointerDrag.GetComponent<DraggablePaper>();
-        if (paper != null)
+
+        if (paper != null&& openHeroPaper.IsPostman)
         {
+            if (paper.isNew)
+            {
+                Debug.Log("İade Kabul Edildi");
+                Destroy(paper.gameObject); 
+                return;
+            }
+
+            if (paper.isCompleted)
+            {
+                Debug.Log(paper.myQuestData.questName + "  yapıldı postacıya teslim edildi " +paper.earnedGold+"altın kazandın");
+                Destroy(paper.gameObject);
+                return;
+            }
+            
+            Debug.Log("Postacı: 'Üzgünüm, bu işi kabul etmiştin. ");
             paper.isReturned = true;
-            Debug.Log(paper.myQuestData.questName + " silindi");
-            Destroy(paper.gameObject);
-            return;
+            
         }
 
         DraggableHeroDetails heroCard = eventData.pointerDrag.GetComponent<DraggableHeroDetails>();
-        if (heroCard != null)
+        if (heroCard != null && openHeroPaper.IsHero)
         {
             Debug.Log("Kahraman reddedildi");
             

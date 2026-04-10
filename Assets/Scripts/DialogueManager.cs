@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class DialogueManager : MonoBehaviour
 {
+    public static DialogueManager Instance;
     [Header("referanges")]
         public TaskManager taskManager;
         public int SpawnQuestAmount=8;
@@ -26,25 +27,38 @@ public class DialogueManager : MonoBehaviour
     public OpenHeroPaper openHeroPaper;
     public WalkTo walkTo;
     
-    
+
+    private bool isDynamicMode=false;
+    private string currentDynamicMessage="";
+
+    void Awake()
+    {
+        if(Instance==null) Instance=this;
+    }
 
     void OnEnable()
     {
+        if (isDynamicMode) return;
+
         currentLineIndex = 0;
         StartNextLine();
     }
-
+    void Oisable()
+    {
+        isDynamicMode=false;        
+    }
 
     public void NextSentences()
     {
         if (isTyping)
         {   //yazarken tıklarsa durdur ve fulle
             StopCoroutine(typingCorountine);
-            dialogueText.text=messages[currentLineIndex];
+            //pazarlık modunda dinamiği değilse listedekini başlat
+            dialogueText.text= isDynamicMode?currentDynamicMessage:messages[currentLineIndex];
             isTyping=false;
             return;
         }
-        
+        if (isDynamicMode) return;
         
             currentLineIndex++;
         //postman için ilk gün toutorial kısmı quest papaer spawnlama gir ve çık
@@ -96,6 +110,17 @@ public class DialogueManager : MonoBehaviour
             gameObject.SetActive(false);
             Debug.Log("diyalog bitti");
         }
+    }
+
+    public void ShowNegotiationLine(string textToType)
+    {
+        isDynamicMode=true;
+        currentDynamicMessage = textToType; // Yazıyı hafızaya al 
+
+        gameObject.SetActive(true); // Paneli aç
+        
+        if (typingCorountine != null) StopCoroutine(typingCorountine);
+        typingCorountine = StartCoroutine(TypeText(currentDynamicMessage));
     }
 
 

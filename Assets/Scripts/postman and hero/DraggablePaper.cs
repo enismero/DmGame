@@ -18,6 +18,12 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
     [HideInInspector] public bool isReturned = false; // iade edildi mi
 
 
+    [Header("Quest Completed")]
+    public bool isNew=true; //ilk spawn mı
+    public bool isCompleted = false; // Görev yapıldı mı?
+    public int earnedGold = 0; // Bu kağıttan kazanılan net para
+    public GameObject successStampObj;
+
     void Awake()
     {
         canvasGroup= GetComponent<CanvasGroup>();
@@ -52,13 +58,10 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
-        if(isReturned) return; //eğer postacıya verildiyse çık
-        
-
         //sürükleme bittiğinde yeni yere koy bırakılmadıysa eski yerine
-        transform.SetParent(parentAfterDrag);
+        
         canvasGroup.blocksRaycasts=true;
+        transform.SetParent(parentAfterDrag);
 
         RectTransform rect=GetComponent<RectTransform>();
         //havadaysa düşür
@@ -102,5 +105,12 @@ public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndD
                 UIManager.Instance.CloseQuestDetails();
             }
         }
+    }
+
+    public void MarkAsCompleted(bool isSucces,int profit)
+    {
+        isCompleted=true;
+        earnedGold=isSucces?profit:0;
+        if(isSucces&&successStampObj!=null) successStampObj.SetActive(true);
     }
 }
