@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems; //sürüklemek için gereli
 using System.Collections;
-using Unity.VisualScripting; //düşme animasyonu için gerekli
+//using Unity.VisualScripting; //düşme animasyonu için gerekli
 
 public class DraggablePaper : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler,IPointerClickHandler
 {
