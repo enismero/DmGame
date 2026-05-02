@@ -16,16 +16,20 @@ public class HeroDraopZone : MonoBehaviour,IDropHandler
     {
         DraggablePaper paper = eventData.pointerDrag.GetComponent<DraggablePaper>();
         //atılan paper mı 
-        if (paper != null && gameManager != null)
+        if (paper == null || gameManager == null)
         {
+            return;
+        }
+        
             if (paper.isCompleted)
             {
-                Debug.Log("sadece postacıya verilebilir görev oki");
+                Debug.Log("sadece postacıya verilebilir görev tamamlanmış");
                 paper.isReturned=true;
                 return;
             }
             
-        } 
+        
+         
         
             //verileri kaydet
             QuestData quest = paper.myQuestData;
@@ -35,8 +39,6 @@ public class HeroDraopZone : MonoBehaviour,IDropHandler
 
             paper.isReturned = false;
             NegotiationManager.Instance.StartNegotiation(hero, quest, paper);
-        
-
-        
     }
+
 }

@@ -14,6 +14,11 @@ public class NegotiationManager : MonoBehaviour
     public Button agreeButton;
     public Button rollDiceButton;
     public Button closeButton;
+    
+    [Header("Dice Animation")]
+    public Animator d20Animator;
+    public float rollDuration = 1.5f;
+    
 
     [Header("current quest data")]
     private HeroStats currentHero;
@@ -136,8 +141,22 @@ public class NegotiationManager : MonoBehaviour
 
     public void RollDice()
     {
+        rollDiceButton.gameObject.SetActive(false);
+        StartCoroutine(RollDiceRoutine());
+    }
+
+    private System.Collections.IEnumerator RollDiceRoutine()
+    {
+        if (d20Animator!=null) d20Animator.SetInteger("diceResult",100);
+        yield return new WaitForSeconds(rollDuration);
+
         int d20Roll = Random.Range(1, 21);
         int totalScore = d20Roll + relevantStatValue;
+
+        if(d20Animator!=null) d20Animator.SetInteger("diceResult",d20Roll);
+
+        yield return new WaitForSeconds(1.0f);
+
 
         // Karımızı hesaplıyoruz (Toplam Ödül - Kahramana Verilen Pay)
         int offerPercentage = (int)offerSlider.value;
@@ -169,7 +188,6 @@ public class NegotiationManager : MonoBehaviour
             }
         }
 
-        rollDiceButton.gameObject.SetActive(false);
     }
 
     private void ReturnPaperToDesk()

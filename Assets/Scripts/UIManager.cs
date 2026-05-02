@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
-using Microsoft.Unity.VisualStudio.Editor;
+//using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 
