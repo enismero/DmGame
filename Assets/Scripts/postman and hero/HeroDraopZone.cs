@@ -14,8 +14,17 @@ public class HeroDraopZone : MonoBehaviour,IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        //atılan kese mi
+        MoneyPouch pouch=eventData.pointerDrag.GetComponent<MoneyPouch>();
+        if (pouch != null)
+        { 
+            NegotiationManager.Instance.OnPouchReceived(pouch);
+            return;
+        } 
+
+
+          //atılan paper mı 
         DraggablePaper paper = eventData.pointerDrag.GetComponent<DraggablePaper>();
-        //atılan paper mı 
         if (paper == null || gameManager == null)
         {
             return;
@@ -27,13 +36,16 @@ public class HeroDraopZone : MonoBehaviour,IDropHandler
                 paper.isReturned=true;
                 return;
             }
-            
-        
-         
-        
+            HeroStats hero = gameManager.newHero;
+            if (string.IsNullOrEmpty(hero.heroName))
+        {
+            Debug.LogWarning("Masada kahraman yok, kağıt verilemez!");
+            paper.isReturned = true; // Kahraman yoksa kağıdı geri yolla
+            return; 
+        }
+
             //verileri kaydet
             QuestData quest = paper.myQuestData;
-            HeroStats hero = gameManager.newHero;
             
             Debug.Log($"{hero.heroName}, '{quest.questName}' için anlaşma vakti ");
 

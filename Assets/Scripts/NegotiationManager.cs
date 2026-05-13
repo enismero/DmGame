@@ -2,36 +2,35 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
+
 public class NegotiationManager : MonoBehaviour
 {
    public static NegotiationManager Instance;
 
    [Header("UI refereance")]
-   public GameObject negotiationPanel;
-   public Slider offerSlider;
    public TextMeshProUGUI heroDialogueText;
-    public TextMeshProUGUI offerValueText;
-    public Button agreeButton;
-    public Button rollDiceButton;
-    public Button closeButton;
+   public GameObject dialogueContainer;
     
-    [Header("Dice Animation")]
-    public Animator d20Animator;
-    public float rollDuration = 1.5f;
+  
+     [Header("Sabır barı")]
+     public Slider patienceBar; //sabır barı
+     public float maxPatience=100f;
+     public float currentPatience; 
+     public float rejection=25f; //düşecek sabır
     
 
     [Header("current quest data")]
     private HeroStats currentHero;
     private QuestData currentQuest;
     private DraggablePaper currentPaper;
-    private int relevantStatValue; //statın kahramandaki karşılığı
-    private int hiddenChance;
-    public int shopReputation = 50;
+   
 
     [Header("Daktilo Ayarları (Kahraman)")]
     public float typeSpeed = 0.03f; // Harf hızı
     private Coroutine typingCoroutine; // Çalışan daktiloyu hafızada tutar
 
+   
     
 
     void Awake()
@@ -42,10 +41,8 @@ public class NegotiationManager : MonoBehaviour
 
     void Start()
     {
-        offerSlider.onValueChanged.AddListener(delegate{UpdateDialogue();});
-        agreeButton.onClick.AddListener(AttemptAgreement);
-        rollDiceButton.onClick.AddListener(RollDice);
-        closeButton.onClick.AddListener(ClosePanel);
+        currentPatience = maxPatience;
+        UpdatePatienceUI();;
     }
 
     
@@ -56,20 +53,70 @@ public class NegotiationManager : MonoBehaviour
         currentQuest=quest;
         currentPaper=paper;
 
-        if(currentQuest==null) return;
+        // Yeni kahraman geldiğinde sabrını tekrar doldur
+        currentPatience = maxPatience;
+        UpdatePatienceUI();
 
-        relevantStatValue=GetRelevantStat(currentHero,currentQuest.requiredStat);
-
-        offerSlider.interactable=true;
-        offerSlider.value=50;
-
-        rollDiceButton.gameObject.SetActive(false);
-        agreeButton.gameObject.SetActive(true);
-        negotiationPanel.SetActive(true);
-
-        heroDialogueText.transform.parent.gameObject.SetActive(true);
-        UpdateDialogue();
+        ShowHeroText($"{hero.heroName}: How much money will I get for this job?");
         
+    }
+
+
+    public void OnPouchReceived(MoneyPouch pouch)
+    {
+        if (currentQuest == null) return;
+
+        int expectedGold = currentQuest.rewardGold / 2; //kabul edeceği tutar ödülün yarısı olarak ayarlı
+        int offeredGold = pouch.totalGoldInPouch;
+
+        //kabul
+        if (offeredGold >= expectedGold)
+        {
+            Debug.Log("Karakter kabul etti.");
+            ShowHeroText("This is good price ,Agreed");
+
+            if (currentPaper != null) 
+            {
+                
+                int myProfit = currentQuest.rewardGold - offeredGold; // Dükkanın karı
+                currentPaper.MarkAsCompleted(myProfit); // Kağıda verildi
+                ReturnPaperToDesk(); // Kağıdı masaya geri gönder
+            }
+            pouch.ResetPouch(); // Keseyi sıfırla ve masaya geri gönder
+            
+        }
+        //redd
+        else
+        {
+            Debug.Log("Karakter reddetti.");
+            currentPatience -= rejection; // Sabrını düşür
+            UpdatePatienceUI();
+            pouch.ResetPouch(); // Reddedince keseyi sıfırla
+            //sabrı biterse
+            if (currentPatience <= 0)
+            {
+                ShowHeroText("Are you kidding me? ");
+                if (currentPaper != null)
+                {
+                    ReturnPaperToDesk();
+                }
+                Debug.Log("Karakter reddetti gidiyo.");
+            }
+            //sabrı varsa
+            else
+            {
+                ShowHeroText("Give some more money...");
+                Debug.Log("Karakter reddetti. teklif bekliyor");
+            }
+        }
+    }
+
+    private void UpdatePatienceUI()
+    {
+        if(patienceBar!=null)
+        {
+            patienceBar.value=currentPatience/maxPatience;
+        }
     }
 
     private int GetRelevantStat(HeroStats hero, StatType reqStat)
@@ -82,112 +129,6 @@ public class NegotiationManager : MonoBehaviour
             case StatType.Charisma: return hero.charisma;
             default: return 0;
         }
-    }
-
-    public void UpdateDialogue()
-    {
-        if (currentQuest == null || heroDialogueText == null || offerValueText == null) return;
-
-        int offerPercentage = (int)offerSlider.value;
-        //teklif edilen parayı yaz
-        int offeredGold = (currentQuest.rewardGold * offerPercentage) / 100;
-        int myProfit = currentQuest.rewardGold - offeredGold;
-
-        offerValueText.text = $"Teklifin: %{offerPercentage} ({offeredGold} Altın) Karın: {myProfit} Altın";
-        //zar beklentisi
-        int expectedPower = relevantStatValue + 10; 
-        int statDifference = expectedPower - currentQuest.statThreshold;
-
-        hiddenChance = 40 + (offerPercentage - 50) + (shopReputation / 2) + (statDifference * 3);
-        //şans +40la başlar + para %50 üstüyse şans artar az verirsen şans eksilir+ dükkan itiibarı ekstra buff verir+stat farkı şansı etkiler -+ yönde
-        hiddenChance = Mathf.Clamp(hiddenChance, 5, 95); //şans 5 - 95 arasına fixler
-        //class uyum bonusu
-        bool isPreferedClass=(currentHero.heroClass==currentQuest.preferredClass);
-        if(isPreferedClass) hiddenChance+=10;
-        // Dialogr kısmı
-
-            string reactionLine=""; //söylenecek cümle burda tutulur
-
-            if(statDifference < -5 && offerPercentage < 60)  reactionLine = "Bu bir intihar görevi! Eğer ölmemi istiyorsan kesenin ağzını açmalısın!";
-            else if (hiddenChance < 20) reactionLine = "Benimle dalga mı geçiyorsun? Bu paraya kılıcımı bile çekmem!";
-            else if (hiddenChance < 40) reactionLine = "Komik bir teklif patron. Zırh bakımım bile bundan fazla tutar.";
-            else if (hiddenChance < 60) reactionLine = "Hmm... Fena değil ama riskli. Biraz daha düşünmem lazım.";
-            else if (hiddenChance < 80) reactionLine = "Makul bir teklif. Anlaştık, o işin icabına bakacağım.";
-            else reactionLine = "Harika bir fiyat! Tüm yeteneklerim senin emrindedir!";
-        
-            ShowHeroText(reactionLine);
-    }
-
-    public void AttemptAgreement()
-    {
-        int roll=Random.Range(1,101);
-
-        if (roll <= hiddenChance)
-        {
-            ShowHeroText("<color=green>Anlaşma sağlandı görev kabul edildi");
-            agreeButton.gameObject.SetActive(false);
-            rollDiceButton.gameObject.SetActive(true);
-            offerSlider.interactable=false;
-        }
-        else
-        {
-            ShowHeroText("<color=red>masadan kalktı dükkandan çıkıyor");
-            agreeButton.gameObject.SetActive(false);
-            offerSlider.interactable = false;
-
-            ReturnPaperToDesk();
-        }
-    }
-
-    public void RollDice()
-    {
-        rollDiceButton.gameObject.SetActive(false);
-        StartCoroutine(RollDiceRoutine());
-    }
-
-    private System.Collections.IEnumerator RollDiceRoutine()
-    {
-        if (d20Animator!=null) d20Animator.SetInteger("diceResult",100);
-        yield return new WaitForSeconds(rollDuration);
-
-        int d20Roll = Random.Range(1, 21);
-        int totalScore = d20Roll + relevantStatValue;
-
-        if(d20Animator!=null) d20Animator.SetInteger("diceResult",d20Roll);
-
-        yield return new WaitForSeconds(1.0f);
-
-
-        // Karımızı hesaplıyoruz (Toplam Ödül - Kahramana Verilen Pay)
-        int offerPercentage = (int)offerSlider.value;
-        int offeredGold = (currentQuest.rewardGold * offerPercentage) / 100;
-        int myProfit = currentQuest.rewardGold - offeredGold;
-
-        if (d20Roll == 20 || totalScore >= currentQuest.statThreshold)
-        {
-            ShowHeroText($"<color=green>GÖREV BAŞARILI!</color>");
-            
-            //Başarılı mührünü bas!
-            if (currentPaper != null) 
-            {
-                currentPaper.MarkAsCompleted(myProfit);
-                ReturnPaperToDesk(); // Mühürlü kağıt masaya düşsün
-            }
-            
-        }
-        else
-        {
-            int damage = currentQuest.statThreshold - totalScore;
-            ShowHeroText($"<color=red>GÖREV BAŞARISIZ!</color>");
-            
-            // YENİ EKLEME: Görev başarısız oldu. 
-            if (currentPaper != null)
-            {
-                currentPaper.MarkAsFailed();
-                ReturnPaperToDesk(); 
-            }
-        }
-
     }
 
     private void ReturnPaperToDesk()
@@ -208,23 +149,19 @@ public class NegotiationManager : MonoBehaviour
         }
     }
 
-    public void ClosePanel()
-    {
-        ReturnPaperToDesk();
-        negotiationPanel.SetActive(false);
-        
-    }
-
+    private void ClearNegotiation()
+        {
+            currentQuest = null;
+            currentHero = default;
+        }
    
     public void ShowHeroText(string textToType)
     {
         
-        heroDialogueText.gameObject.SetActive(true); 
-        
-        // Eğer önceden yazılan bir yazı varsa durdur
+        if (dialogueContainer != null) dialogueContainer.SetActive(true);
+        if (heroDialogueText != null) heroDialogueText.gameObject.SetActive(true);
+
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-        
-        // Yeni yazıyı başlat
         typingCoroutine = StartCoroutine(TypeText(textToType));
     }
 
